@@ -3,6 +3,7 @@ package com.example.moisesneto.webfluxcurso.domain.service;
 import com.example.moisesneto.webfluxcurso.domain.mapper.UserMapper;
 import com.example.moisesneto.webfluxcurso.domain.model.User;
 import com.example.moisesneto.webfluxcurso.domain.model.request.UserRequest;
+import com.example.moisesneto.webfluxcurso.events.exceptions.ObjectNotFoundException;
 import com.example.moisesneto.webfluxcurso.repository.mongodb.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,10 @@ public class UserService {
     }
 
     public Mono<User> findById(final String id){
-        return userRepository.findById(id);
+        return userRepository.findById(id)
+                .switchIfEmpty(Mono.error(new ObjectNotFoundException(
+                        String.format("Objeto não encontrado. Id: %s, Type: %s", id, User.class.getSimpleName())
+                )));
     }
 
     public Flux<User> findall(){
