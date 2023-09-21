@@ -45,4 +45,12 @@ public class UserControllerImp implements UserController {
                         .map(userMapper::toResponse)
         );
     }
+
+    @Override
+    public ResponseEntity<Mono<Void>> update(String id) {
+        return ResponseEntity.ok().body(
+                userService.delete(id).then()
+        );
+    }
+
 }

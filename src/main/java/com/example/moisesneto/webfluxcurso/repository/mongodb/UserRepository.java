@@ -3,6 +3,8 @@ package com.example.moisesneto.webfluxcurso.repository.mongodb;
 import com.example.moisesneto.webfluxcurso.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,4 +28,10 @@ public class UserRepository {
         return templateMongo.findAll(User.class);
     }
 
+
+    public Mono<User> findAndRemover(String id) {
+        Query query = new Query();
+        Criteria where = Criteria.where("id").is(id);
+        return templateMongo.findAndRemove(query.addCriteria(where), User.class);
+    }
 }
