@@ -8,16 +8,15 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface UserController {
-
     @PostMapping
-    ResponseEntity<Mono<void>> creatUser(@RequestBody UserRequest user){
-    }
+    ResponseEntity<Mono<Void>> save(@RequestBody UserRequest user);
+
     @GetMapping(value = "/{id}")
-    ResponseEntity<Mono<UserResponse>> find(@PathVariable String id){
-    } @GetMapping
-    ResponseEntity<Flux<UserResponse>> findall(){
-    }
+    ResponseEntity<Mono<UserResponse>> find(@PathVariable String id);
+
+    @GetMapping
+    ResponseEntity<Flux<UserResponse>> findall();
+
     @PatchMapping(value = "/{id}")
-    ResponseEntity<Mono<UserResponse>> creatUser(@PathVariable String id, @RequestBody UserRequest user){
-    }
+    ResponseEntity<Mono<UserResponse>> save(@PathVariable String id, @RequestBody UserRequest user);
 }
