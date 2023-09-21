@@ -22,9 +22,9 @@ public class UserControllerImp implements UserController {
     private final UserMapper userMapper;
 
     @Override
-    public ResponseEntity<Mono<Void>> save(final UserRequest user) {
+    public ResponseEntity<Mono<Void>> save(final UserRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userService.save(user).then()); //then pega o retorno e transforma em MONO
+                .body(userService.save(request).then()); //then pega o retorno e transforma em MONO
     }
 
     @Override
@@ -39,7 +39,10 @@ public class UserControllerImp implements UserController {
     }
 
     @Override
-    public ResponseEntity<Mono<UserResponse>> update(String id, UserRequest user) {
-        return null;
+    public ResponseEntity<Mono<UserResponse>> update(String id, UserRequest request) {
+        return ResponseEntity.ok().body(
+                userService.update(id, request)
+                        .map(userMapper::toResponse)
+        );
     }
 }
