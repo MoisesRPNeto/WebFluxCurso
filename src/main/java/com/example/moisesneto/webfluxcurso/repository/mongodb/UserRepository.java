@@ -18,11 +18,11 @@ public class UserRepository {
         return templateMongo.save(user);
     }
 
-    public Flux<User> findall() {
-        return templateMongo.findAll(User.class);
-    }
-
     public Mono<User> findById(String id) {
         return templateMongo.findById(id, User.class);
+    }
+
+    public Flux<User> findall() {
+        return templateMongo.findAll(User.class);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.moisesneto.webfluxcurso.application;
+package com.example.moisesneto.webfluxcurso;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
