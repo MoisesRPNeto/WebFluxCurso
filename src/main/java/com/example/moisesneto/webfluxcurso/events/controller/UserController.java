@@ -13,11 +13,11 @@ public interface UserController {
     ResponseEntity<Mono<Void>> save(@Valid @RequestBody UserRequest user);
 
     @GetMapping(value = "/{id}")
-    ResponseEntity<Mono<UserResponse>> find(@PathVariable String id);
+    ResponseEntity<Mono<UserResponse>> findById(@PathVariable String id);
 
     @GetMapping
     ResponseEntity<Flux<UserResponse>> findall();
 
     @PatchMapping(value = "/{id}")
-    ResponseEntity<Mono<UserResponse>> save(@PathVariable String id, @RequestBody UserRequest user);
+    ResponseEntity<Mono<UserResponse>> update(@PathVariable String id, @RequestBody UserRequest user);
 }

@@ -20,6 +20,10 @@ public class UserService {
         return userRepository.save(userMapper.toEntity(user));
     }
 
+    public Mono<User> findById(final String id){
+        return userRepository.findById(id);
+    }
+
     public Flux<User> findall(){
         return userRepository.findall();
     }
