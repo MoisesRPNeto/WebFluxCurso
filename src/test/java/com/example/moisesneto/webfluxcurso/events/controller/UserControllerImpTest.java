@@ -113,7 +113,7 @@ class UserControllerImpTest {
 
 
 
-        verify(service, times(1)).save(any(UserRequest.class));
+        verify(service, times(1)).findById(id);
 
     }
 
@@ -147,15 +147,59 @@ class UserControllerImpTest {
 
 
 
-        verify(service, times(1)).save(any(UserRequest.class));
+        verify(service, times(1)).findall();
 
     }
 
     @Test
-    void update() {
+    void update_teste() {
+        String id = "123";
+        UserResponse response = UserResponse.builder()
+                .id(id)
+                .nome("Moises")
+                .email("moises@gmail.com")
+                .senha("123")
+                .build();
+        User user = User.builder()
+                .id(id)
+                .nome("Moises")
+                .email("moises@gmail.com")
+                .senha("123")
+                .build();
+        UserRequest request = UserRequest.builder()
+                .nome("Moises")
+                .email("moises@gmail.com")
+                .senha("123")
+                .build();
+        when(service.update(anyString(), request)).thenReturn(Mono.just(user));
+        when(mapper.toResponse(any(User.class))).thenReturn(response);
+
+        webTestClient.patch().uri("/users/" + id) //Get no endpoint
+                .contentType(APPLICATION_JSON) //evento em json
+                .exchange() //possibilitar pegar o retorno
+                .expectStatus().isOk()//expectativa de retornar um OK
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(id) //comparar valores de retorno
+                .jsonPath("$.nome").isEqualTo(response.getNome())//comparar valores de retorno
+                .jsonPath("$.email").isEqualTo(response.getEmail())//comparar valores de retorno
+                .jsonPath("$.senha").isEqualTo(response.getSenha());//comparar valores de retorno
+
+
+
+        verify(service, times(1)).update(anyString(), any(UserRequest.class));
+
     }
 
+
     @Test
-    void testUpdate() {
+    void test_delete() {
+        String id = "123";
+        when(service.delete(anyString()).thenReturn(Mono.just(User.builder().build())));
+
+        webTestClient.delete().uri("/users/" + id) //Get no endpoint
+                .exchange() //possibilitar pegar o retorno
+                .expectStatus().isOk();//expectativa de retornar um OK
+
+        verify(service, times(1)).delete(anyString());
     }
 }
