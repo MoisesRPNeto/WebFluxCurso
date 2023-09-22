@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -118,6 +119,36 @@ class UserControllerImpTest {
 
     @Test
     void findall() {
+        String id = "123";
+        UserResponse response = UserResponse.builder()
+                .id(id)
+                .nome("Moises")
+                .email("moises@gmail.com")
+                .senha("123")
+                .build();
+        User user = User.builder()
+                .id(id)
+                .nome("Moises")
+                .email("moises@gmail.com")
+                .senha("123")
+                .build();
+        when(service.findall()).thenReturn(Flux.just(user));
+        when(mapper.toResponse(any(User.class))).thenReturn(response);
+
+        webTestClient.get().uri("/users") //Get no endpoint
+                .accept(APPLICATION_JSON) //evento em json
+                .exchange() //possibilitar pegar o retorno
+                .expectStatus().isOk()//expectativa de retornar um OK
+                .expectBody()
+                .jsonPath("$.[0].id").isEqualTo(id) //comparar valores de retorno
+                .jsonPath("$.[0].nome").isEqualTo(response.getNome())//comparar valores de retorno
+                .jsonPath("$.[0].email").isEqualTo(response.getEmail())//comparar valores de retorno
+                .jsonPath("$.[0].senha").isEqualTo(response.getSenha());//comparar valores de retorno
+
+
+
+        verify(service, times(1)).save(any(UserRequest.class));
+
     }
 
     @Test
